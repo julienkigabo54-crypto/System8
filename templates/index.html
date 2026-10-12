@@ -58,6 +58,14 @@
     .download { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 0 14px; border: 1px solid var(--line); border-radius: 6px; color: var(--forest); background: var(--white); text-decoration: none; font-size: 13px; font-weight: 700; white-space: nowrap; }
     .download:hover { border-color: var(--forest); }
     .download svg { width: 16px; height: 16px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    button.download { font-family: inherit; cursor: pointer; }
+    button.download:disabled { opacity: .7; cursor: default; }
+    button.download.saved { color: #1f6b3a; border-color: #b9dcc4; background: #f1faf4; }
+    .log-status { margin: -8px 0 18px; color: var(--muted); font-size: 13px; }
+    .log-status:empty { display: none; }
+    .log-status.ok { color: #1f6b3a; }
+    .log-status.error { color: #9a3b27; }
     .product-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
     .product-card { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: var(--white); box-shadow: 0 3px 12px rgba(20,45,36,.025); transition: transform .2s ease, box-shadow .2s ease; animation: reveal .35s both; }
     .product-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
@@ -159,13 +167,20 @@
             <h2 id="results-title">{{ products|length }} finds for “{{ term }}”</h2>
             <div class="results-meta"><span>Prices in USD</span><span aria-hidden="true">·</span><span class="source">{{ source }}</span></div>
           </div>
-          {% if excel_path %}
-            <a class="download" href="/download-excel" aria-label="Download your product list as Excel">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v3h14v-3"/></svg>
-              Download Excel
-            </a>
-          {% endif %}
+          <div class="actions">
+            {% if excel_path %}
+              <a class="download" href="/download-excel" aria-label="Download your product list as Excel">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v3h14v-3"/></svg>
+                Download Excel
+              </a>
+            {% endif %}
+            <button type="button" class="download" id="save-log" aria-label="Save this product list to the commission log">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></svg>
+              <span id="save-log-label">Save commission log</span>
+            </button>
+          </div>
         </div>
+        <p class="log-status" id="log-status" role="status" aria-live="polite"></p>
 
         <div class="product-grid">
           {% for p in products %}
@@ -193,6 +208,50 @@
             </article>
           {% endfor %}
         </div>
+        <script type="application/json" id="log-data">{{ log_payload|tojson }}</script>
+        <script>
+          (function () {
+            var button = document.getElementById("save-log");
+            var label = document.getElementById("save-log-label");
+            var status = document.getElementById("log-status");
+            var data = document.getElementById("log-data");
+            if (!button || !data) { return; }
+
+            function show(text, kind) {
+              status.className = "log-status" + (kind ? " " + kind : "");
+              status.textContent = text;
+            }
+
+            button.addEventListener("click", function () {
+              button.disabled = true;
+              show("Saving commission log…", "");
+              fetch("/save-commission", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: data.textContent
+              })
+                .then(function (response) {
+                  return response.json().then(function (body) {
+                    return { ok: response.ok && body.ok, message: body.message };
+                  });
+                })
+                .then(function (result) {
+                  if (result.ok) {
+                    button.classList.add("saved");
+                    label.textContent = "Saved to commission log";
+                    show(result.message, "ok");
+                  } else {
+                    button.disabled = false;
+                    show(result.message || "The commission log could not be saved.", "error");
+                  }
+                })
+                .catch(function () {
+                  button.disabled = false;
+                  show("The commission log could not be saved. Please try again.", "error");
+                });
+            });
+          })();
+        </script>
       </section>
     {% elif term and not message %}
       <section class="empty-state" aria-live="polite">

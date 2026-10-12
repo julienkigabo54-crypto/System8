@@ -25,7 +25,7 @@ A responsive Flask product-search demo that retrieves Amazon search results, cal
    python app.py
    ```
 
-5. Open `http://127.0.0.1:5000` and search for a product. The Excel workbook is saved to the Windows Desktop and can also be downloaded from the results page. Product pictures are stored in `Online_Pictures/`.
+5. Open `http://127.0.0.1:5000` and search for a product. The Excel workbook is saved to the Windows Desktop and can also be downloaded from the results page. Product pictures are stored in `Online_Pictures/`. Click **Save commission log** on the results page to save the displayed list to MongoDB.
 
 Amazon may return CAPTCHA, omit product prices, or block automated requests. In those cases, the app reports the issue and records the failed search in `search_history`; it does not calculate commissions from guessed prices or display fabricated data by default. For an explicitly labelled classroom demo fallback, set `$env:SMARTCART_USE_SAMPLE_IF_BLOCKED = "true"` before starting the app. Amazon does not reliably expose seller email addresses in public search results, so `Retailer_email` is `N/A`.
 
@@ -33,7 +33,7 @@ Amazon may return CAPTCHA, omit product prices, or block automated requests. In 
 
 - `products_cache`: normalized search term, saved products, and cache creation time. Results are considered fresh for 24 hours.
 - `search_history`: every attempted search, timestamp, result count, and source (`cache`, `live`, `sample`, or `error`).
-- `commission_log`: each returned product list with per-product commission and total price, plus list-level commission/value totals and source. These are estimated commissions on search results, not completed-sale records.
+- `commission_log`: saved when you click **Save commission log** on the results page (searches are not logged automatically). Each entry holds the product list with every product's price, commission fee, total price and picture file name, plus list-level commission/value totals and source. The fee and total are recalculated on the server when saving. These are estimated commissions on search results, not completed-sale records.
 
 ## Assessment checklist
 
@@ -44,9 +44,9 @@ Amazon may return CAPTCHA, omit product prices, or block automated requests. In 
 - [x] Connect to MongoDB and use `products_cache`, `search_history`, and `commission_log`.
 - [x] Check the 24-hour MongoDB cache before searching Amazon.
 - [x] Record each completed search, including cached and zero-result searches.
-- [x] Record each returned list, including cached results, for commission reporting.
+- [x] Save a returned list, including cached results, to `commission_log` on demand with the Save commission log button.
 - [x] Export product results to an Excel workbook on the Desktop.
-- [x] Save product images in `Online_Pictures/` and reuse existing local image files.
+- [x] Save product images in `Online_Pictures/` (JPEG, PNG, WebP or GIF up to 5 MB) and reuse existing local image files.
 - [x] Provide a responsive web page with accessible search controls, mobile-friendly product cards, and Excel download.
 - [x] Handle blank input, MongoDB connection failure, Amazon failure, missing images, and Excel write failure.
 - [ ] Replace the workbook identity defaults with your own first name, last name, and registration number before running the final demo.

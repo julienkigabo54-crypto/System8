@@ -63,6 +63,8 @@ def log_search(term, number_of_results, source):
 
 
 def log_commission(term, products, source="live"):
+    """Save one product list, with each product's commission fee and total price,
+    plus the list totals, in the commission_log collection."""
     total_commission = round(sum(p["Commission_fee"] for p in products), 2)
     total_value = round(sum(p["Total_price"] for p in products), 2)
     commission_log.insert_one({
@@ -74,3 +76,8 @@ def log_commission(term, products, source="live"):
         "total_value": total_value,
         "products": products,
     })
+    return {
+        "number_of_products": len(products),
+        "total_commission": total_commission,
+        "total_value": total_value,
+    }
