@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173d32">
+  <title>SmartCart | Shop with confidence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --forest: #173d32;
+      --forest-deep: #102d25;
+      --leaf: #d7f06b;
+      --paper: #f7f7f2;
+      --ink: #1c2924;
+      --muted: #6d7771;
+      --line: #e4e8e1;
+      --white: #fff;
+      --coral: #d45f46;
+      --shadow: 0 15px 40px rgba(20, 45, 36, .08);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font-family: "DM Sans", sans-serif; }
+    a { color: inherit; }
+    .topbar { height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 max(24px, calc((100vw - 1180px) / 2)); background: var(--white); border-bottom: 1px solid var(--line); }
+    .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--forest); text-decoration: none; font: 800 20px "Manrope", sans-serif; }
+    .brand-mark { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px 10px 10px 3px; color: var(--forest-deep); background: var(--leaf); }
+    .brand-mark svg { width: 20px; height: 20px; }
+    .top-note { color: var(--muted); font-size: 13px; }
+    .hero { overflow: hidden; position: relative; color: white; background: var(--forest); }
+    .hero::after { position: absolute; right: -80px; top: -190px; width: 450px; height: 450px; border: 1px solid rgba(215, 240, 107, .2); border-radius: 50%; box-shadow: 0 0 0 48px rgba(215, 240, 107, .035), 0 0 0 100px rgba(215, 240, 107, .025); content: ""; pointer-events: none; }
+    .hero-inner { position: relative; z-index: 1; width: min(1180px, calc(100% - 48px)); margin: auto; padding: 62px 0 56px; }
+    .eyebrow { display: flex; align-items: center; gap: 9px; margin: 0 0 17px; color: var(--leaf); font-size: 12px; font-weight: 700; text-transform: uppercase; }
+    .eyebrow::before { width: 22px; height: 2px; background: var(--leaf); content: ""; }
+    h1 { max-width: 690px; margin: 0; font: 800 clamp(34px, 5vw, 54px)/1.08 "Manrope", sans-serif; letter-spacing: 0; }
+    .hero-copy { max-width: 520px; margin: 14px 0 28px; color: rgba(255,255,255,.72); font-size: 15px; line-height: 1.65; }
+    .search-form { display: flex; width: min(700px, 100%); padding: 6px; gap: 8px; background: white; border-radius: 9px; box-shadow: 0 14px 38px rgba(0,0,0,.17); }
+    .search-icon { width: 22px; height: 22px; align-self: center; margin-left: 12px; color: #7a857e; flex: 0 0 auto; }
+    .search-form input { width: 100%; min-width: 0; border: 0; outline: 0; padding: 12px 6px; color: var(--ink); background: transparent; font: 500 15px "DM Sans", sans-serif; }
+    .search-form input::placeholder { color: #8a938d; }
+    .search-form button { min-height: 48px; padding: 0 22px; border: 0; border-radius: 6px; color: white; background: var(--coral); font: 700 14px "DM Sans", sans-serif; cursor: pointer; transition: background .18s ease, transform .18s ease; }
+    .search-form button:hover { background: #ba4c37; transform: translateY(-1px); }
+    .search-form button:focus-visible, .download:focus-visible, .search-form input:focus-visible { outline: 3px solid var(--leaf); outline-offset: 2px; }
+    .trust-line { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 17px; color: rgba(255,255,255,.66); font-size: 12px; }
+    .trust-line span { display: inline-flex; align-items: center; gap: 6px; }
+    .trust-line svg { width: 14px; height: 14px; color: var(--leaf); }
+    main { width: min(1180px, calc(100% - 48px)); min-height: 250px; margin: 0 auto; padding: 36px 0 68px; }
+    .alert { display: flex; align-items: flex-start; gap: 11px; margin-bottom: 24px; padding: 15px 17px; border: 1px solid #f0c9a0; border-radius: 7px; color: #763a1d; background: #fff6eb; font-size: 14px; line-height: 1.5; }
+    .alert svg { width: 19px; height: 19px; margin-top: 1px; flex: 0 0 auto; }
+    .results-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 22px; }
+    .results-kicker { margin: 0 0 5px; color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; }
+    h2 { margin: 0; font: 800 25px "Manrope", sans-serif; letter-spacing: 0; }
+    .results-meta { display: flex; align-items: center; gap: 9px; margin-top: 8px; color: var(--muted); font-size: 13px; }
+    .source { padding: 4px 8px; border-radius: 99px; color: var(--forest); background: #e8efe8; font-size: 11px; font-weight: 700; text-transform: capitalize; }
+    .download { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 0 14px; border: 1px solid var(--line); border-radius: 6px; color: var(--forest); background: var(--white); text-decoration: none; font-size: 13px; font-weight: 700; white-space: nowrap; }
+    .download:hover { border-color: var(--forest); }
+    .download svg { width: 16px; height: 16px; }
+    .product-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .product-card { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: var(--white); box-shadow: 0 3px 12px rgba(20,45,36,.025); transition: transform .2s ease, box-shadow .2s ease; animation: reveal .35s both; }
+    .product-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .product-card:nth-child(3n + 2) { animation-delay: .05s; }
+    .product-card:nth-child(3n) { animation-delay: .1s; }
+    .product-image { height: 190px; display: grid; place-items: center; overflow: hidden; padding: 16px; background: #fff; border-bottom: 1px solid #f0f1ed; }
+    .product-image img { display: block; width: auto; height: auto; max-width: 100%; max-height: 142px; object-fit: contain; }
+    .image-placeholder { width: 76px; height: 76px; display: grid; place-items: center; border-radius: 50%; color: #7b877d; background: #f1f4ed; }
+    .image-placeholder svg { width: 32px; height: 32px; }
+    .product-content { padding: 17px; }
+    .product-topline { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 9px; }
+    .retailer { color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .rating { color: #966515; font-size: 12px; font-weight: 700; }
+    .product-name { min-height: 44px; margin: 0 0 15px; font: 700 15px/1.45 "Manrope", sans-serif; letter-spacing: 0; }
+    .price-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-bottom: 13px; border-bottom: 1px solid var(--line); }
+    .base-price { font: 800 22px "Manrope", sans-serif; color: var(--forest-deep); }
+    .price-label { color: var(--muted); font-size: 11px; }
+    .total-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 13px; }
+    .total-label { color: var(--muted); font-size: 12px; }
+    .total-price { font-size: 14px; font-weight: 800; }
+    .commission-note { margin-top: 9px; color: #6d7771; font-size: 11px; }
+    .empty-state { max-width: 510px; margin: 42px auto 10px; text-align: center; animation: reveal .35s both; }
+    .empty-icon { width: 58px; height: 58px; display: grid; place-items: center; margin: 0 auto 15px; border-radius: 18px 18px 18px 5px; color: var(--forest); background: var(--leaf); }
+    .empty-icon svg { width: 27px; height: 27px; }
+    .empty-state h2 { font-size: 20px; }
+    .empty-state p { margin: 9px 0 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
+    footer { padding: 20px 24px; border-top: 1px solid var(--line); color: var(--muted); background: white; text-align: center; font-size: 12px; }
+    @keyframes reveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 900px) { .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .hero-inner { padding: 52px 0 48px; } }
+    @media (max-width: 600px) {
+      .topbar { height: 60px; padding: 0 18px; }
+      .brand { font-size: 18px; }
+      .top-note { max-width: 115px; font-size: 11px; text-align: right; }
+      .hero-inner, main { width: calc(100% - 36px); }
+      .hero-inner { padding: 42px 0 37px; }
+      h1 { max-width: 430px; font-size: 36px; }
+      .hero-copy { margin: 12px 0 22px; font-size: 14px; }
+      .search-form { gap: 4px; }
+      .search-icon { margin-left: 7px; }
+      .search-form input { font-size: 14px; }
+      .search-form button { min-height: 44px; padding: 0 13px; font-size: 13px; }
+      .trust-line { gap: 10px 14px; font-size: 11px; }
+      main { padding: 27px 0 48px; }
+      .results-head { align-items: flex-start; flex-direction: column; gap: 14px; }
+      .download { min-height: 40px; }
+      .product-grid { grid-template-columns: 1fr; gap: 13px; }
+      .product-card { display: grid; grid-template-columns: 112px minmax(0, 1fr); }
+      .product-image { height: auto; min-height: 160px; overflow: hidden; padding: 10px; border-right: 1px solid #f0f1ed; border-bottom: 0; }
+      .product-image img { max-width: 100%; max-height: 138px; }
+      .product-content { padding: 13px; }
+      .product-name { min-height: 0; margin-bottom: 11px; font-size: 13px; }
+      .base-price { font-size: 19px; }
+      .price-label { font-size: 10px; }
+      .product-topline { margin-bottom: 7px; }
+      .commission-note { font-size: 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="SmartCart home">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 1.9-1.4L21 8H6"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg></span>
+      SmartCart
+    </a>
+    <div class="top-note">A smarter way to shop online</div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Amazon finds, made clearer</p>
+      <h1>Find your next<br>good thing.</h1>
+      <p class="hero-copy">Compare real Amazon products with transparent pricing. See the 10% SmartCart service fee before you decide.</p>
+      <form class="search-form" method="POST" action="/" role="search">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg>
+        <input type="search" name="product" aria-label="Product name" placeholder="What are you looking for?" value="{{ term }}" required>
+        <button type="submit">Search products</button>
+      </form>
+      <div class="trust-line">
+        <span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 10 4 4 8-8"/></svg>Live product search</span>
+        <span><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 2.5 16 5v4.7c0 3.6-2.6 6.3-6 7.8-3.4-1.5-6-4.2-6-7.8V5l6-2.5Z"/><path d="m7.5 9.8 1.7 1.7 3.5-3.5"/></svg>Clear service fee</span>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    {% if message %}
+      <div class="alert" role="status">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5m0 3h.01"/></svg>
+        <span>{{ message }}</span>
+      </div>
+    {% endif %}
+
+    {% if products %}
+      <section aria-labelledby="results-title">
+        <div class="results-head">
+          <div>
+            <p class="results-kicker">Your search results</p>
+            <h2 id="results-title">{{ products|length }} finds for “{{ term }}”</h2>
+            <div class="results-meta"><span>Prices in USD</span><span aria-hidden="true">·</span><span class="source">{{ source }}</span></div>
+          </div>
+          {% if excel_path %}
+            <a class="download" href="/download-excel" aria-label="Download your product list as Excel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v3h14v-3"/></svg>
+              Download Excel
+            </a>
+          {% endif %}
+        </div>
+
+        <div class="product-grid">
+          {% for p in products %}
+            <article class="product-card">
+              <div class="product-image">
+                {% if p.Product_picture_name %}
+                  <img src="/pictures/{{ p.Product_picture_name }}" alt="{{ p.Product_Name }}" loading="lazy">
+                {% else %}
+                  <span class="image-placeholder" aria-label="Product image unavailable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m21 15-5-5L5 20"/></svg></span>
+                {% endif %}
+              </div>
+              <div class="product-content">
+                <div class="product-topline">
+                  <span class="retailer">{{ p.retailer_name }}</span>
+                  <span class="rating" aria-label="Rating {{ p.global_rating }} out of 5">{% if p.global_rating %}★ {{ p.global_rating }}{% else %}Not rated{% endif %}</span>
+                </div>
+                <h3 class="product-name">{{ p.Product_Name }}</h3>
+                <div class="price-row">
+                  <div><div class="price-label">Product price</div><div class="base-price">${{ "%.2f"|format(p.Product_Price) }}</div></div>
+                  <div class="price-label">+ ${{ "%.2f"|format(p.Commission_fee) }} fee</div>
+                </div>
+                <div class="total-row"><span class="total-label">Your total</span><span class="total-price">${{ "%.2f"|format(p.Total_price) }}</span></div>
+                <div class="commission-note">Retailer email: {{ p.Retailer_email }}{% if p.Product_picture_name %} · {{ p.Product_picture_name }}{% endif %}</div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      </section>
+    {% elif term and not message %}
+      <section class="empty-state" aria-live="polite">
+        <span class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5M8 10.8h5.6"/></svg></span>
+        <h2>No matching products this time</h2>
+        <p>Try a broader search such as “headphones” or “laptop”. Amazon sometimes changes or limits the results it makes available.</p>
+      </section>
+    {% else %}
+      <section class="empty-state">
+        <span class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 1.9-1.4L21 8H6"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg></span>
+        <h2>What are you shopping for?</h2>
+        <p>Search Amazon products and compare the item price with your clear, commission-included total.</p>
+      </section>
+    {% endif %}
+  </main>
+  <footer>SmartCart Solutions · Huye District, Rwanda</footer>
+</body>
+</html>
